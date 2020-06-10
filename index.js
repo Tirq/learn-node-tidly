@@ -4,14 +4,18 @@ const morgan = require('morgan');
 const logger = require('./logger');
 const express = require('express');
 const app = express();
+const env = app.get('env'); // execute process.env.NODE_ENV - DEV is default
+console.log(`Running in ${env.toUpperCase()} environment!`)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(helmet());
-app.use(morgan('tiny'));
 
-app.use(logger);
-
+if(env === 'development') {
+    console.log('Custom log and morgan log is enabled...');
+    app.use(morgan('tiny'));
+    app.use(logger);
+}
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`))
