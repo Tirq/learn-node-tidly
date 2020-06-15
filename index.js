@@ -11,6 +11,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(helmet());
 
+app.set('view engine', 'pug');
+app.set('views', './views');
+
 if(env === 'development') {
     console.log('Custom log and morgan log is enabled...');
     app.use(morgan('tiny'));
@@ -28,6 +31,11 @@ const genres = [
     {id: 3, name: 'Animation'}
 
 ];
+
+app.get("/", (req, res) => {
+    res.render('index', { title:'My express app using pug', 
+                          msg:'My express app using pug as the template generator...'});
+});
 
 app.get(rootUrl, (req, res) => {
     res.send(genres);
